@@ -258,9 +258,16 @@ Press "Start Vision" to begin live AI detection...
         let analysisInterval = null;
         let currentEnvironment = 'warehouse';
         let riskAlertsCount = 0;
+        let backgroundIndex = 0; 
+
+        // Simulação de Imagens de Armazém (URLs de Placeholder Genéricas) para dar o efeito de frame rodando
+        const simulatedBackgrounds = [
+            'https://via.placeholder.com/640x360/1a1a1a/FFFFFF?text=WAREHOUSE+VIEW+1',
+            'https://via.placeholder.com/640x360/333333/FFFFFF?text=WAREHOUSE+VIEW+2',
+            'https://via.placeholder.com/640x360/4d4d4d/FFFFFF?text=WAREHOUSE+VIEW+3'
+        ];
 
         // --- Catálogo de Detecções (150+ Simulado) ---
-        // Detalhe: As cores são usadas para as caixas delimitadoras
         const detectionUniverse = {
             '🔫 ARMA': { 'color': '#FF0000', 'risk': 'CRITICO', 'category': 'seguranca' },
             '💣 EXPLOSIVO': { 'color': '#FF3300', 'risk': 'CRITICO', 'category': 'seguranca' },
@@ -338,54 +345,55 @@ Press "Start Vision" to begin live AI detection...
 
         function changeEnvironment(newEnv) {
             currentEnvironment = newEnv;
-            document.getElementById("current-env-display").innerText = `Ambiente: ${newEnv.toUpperCase()}`;
+            // Força a atualização do canvas para o novo ambiente
+            stopVision();
+            startSimulatedVision();
             runAnalysisCycle();
         }
-
+        
+        // Função que aciona Start/Stop
         function toggleCamera() {
-            if (cameraStream) {
-                stopCamera();
+            if (analysisInterval) {
+                stopVision();
             } else {
-                startCamera();
+                startSimulatedVision();
             }
         }
         
-        async function startCamera() {
-            try {
-                const video = document.getElementById('camera-feed');
-                video.srcObject = await navigator.mediaDevices.getUserMedia({ 
-                    video: { width: 640, height: 480, facingMode: 'environment' } 
-                });
-                video.style.display = 'block';
-                document.getElementById('start-btn').textContent = '⏹️ Stop Vision';
-                updateStatus('🟢 Future Vision Online', 'success');
-                if (autoMode) {
-                    analysisInterval = setInterval(runAnalysisCycle, 1000);
-                }
-            } catch (error) {
-                updateStatus('🟡 Using Simulated Vision Feed', 'warning');
-                document.getElementById('start-btn').textContent = '⏹️ Stop Vision';
-                const canvas = document.getElementById('object-canvas');
-                canvas.width = 640;
-                canvas.height = 360; 
-                if (autoMode) {
-                    analysisInterval = setInterval(runAnalysisCycle, 1000);
-                }
+        // Função que simula o START do sistema
+        async function startSimulatedVision() {
+            if (analysisInterval) {
+                stopVision();
+                return;
+            }
+
+            // Garante que o canvas tem o tamanho correto
+            const canvas = document.getElementById('object-canvas');
+            canvas.width = 640;
+            canvas.height = 360; 
+            
+            // Força o desenho do fundo simulado (o preto/azul com texto)
+            drawSimulatedBackground(); 
+
+            document.getElementById('start-btn').textContent = '⏹️ Stop Vision';
+            updateStatus('🟢 Future Vision Online (Simulated Mode Active)', 'success');
+            
+            // Inicia o Auto Mode (1s interval)
+            if (autoMode) {
+                analysisInterval = setInterval(runAnalysisCycle, 1000);
+            } else {
+                runAnalysisCycle(); 
             }
         }
 
-        function stopCamera() {
-            if (cameraStream) {
-                cameraStream.getTracks().forEach(track => track.stop());
-                cameraStream = null;
-            }
+        // Função que simula o STOP do sistema
+        function stopVision() {
             if (analysisInterval) {
                 clearInterval(analysisInterval);
                 analysisInterval = null;
             }
             document.getElementById('start-btn').textContent = '📷 Start Vision';
-            document.getElementById('camera-feed').style.display = 'none';
-            drawSimulatedBackground();
+            drawSimulatedBackground(); 
             updateStatus('🔴 Vision System Offline', 'error');
         }
         
@@ -401,23 +409,37 @@ Press "Start Vision" to begin live AI detection...
         }
         
         function emergencyStop() {
-            stopCamera();
+            stopVision();
             updateStatus('🚨 GLOBAL HALT ACTIVATED (CRITICO)', 'error');
             alert('🚨 EMERGENCY STOP ACTIVATED. All systems halted.');
         }
 
+        // Desenha o fundo (agora rotativo e realista)
         function drawSimulatedBackground() {
             const canvas = document.getElementById('object-canvas');
             const ctx = canvas.getContext('2d');
             canvas.width = 640;
             canvas.height = 360; 
             
-            ctx.fillStyle = '#2c5364';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = 'rgba(255,255,255,0.1)';
-            ctx.font = '30px Arial';
-            ctx.fillText('PSAE FUTURE VISION', 180, 180);
-            drawBoundingBoxes([]); // Limpa as caixas
+            // 1. Muda o índice e carrega a imagem
+            const bgUrl = simulatedBackgrounds[backgroundIndex];
+            backgroundIndex = (backgroundIndex + 1) % simulatedBackgrounds.length;
+            
+            const img = new Image();
+            img.crossOrigin = "Anonymous";
+            img.onload = function() {
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                // Não chama drawBoundingBoxes([]) aqui para evitar apagar as caixas antes do ciclo.
+            }
+            img.onerror = function() {
+                 // Fallback simples se a URL falhar
+                ctx.fillStyle = '#2c5364';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = 'white';
+                ctx.font = '20px Arial';
+                ctx.fillText('Simulated Background Failed to Load', 150, 180);
+            }
+            img.src = bgUrl;
         }
         
         // --- Loop Principal de Análise ---
@@ -425,7 +447,8 @@ Press "Start Vision" to begin live AI detection...
         async function runAnalysisCycle() {
             const detections = simulateFutureDetection();
             
-            drawBoundingBoxes(detections);
+            // O desenho das caixas agora garante que o fundo é desenhado antes
+            drawBoundingBoxes(detections); 
             renderDetectionBadges(detections);
             
             const analysisOutput = performEdgeCognitiveAnalysis(detections);
@@ -474,7 +497,7 @@ Press "Start Vision" to begin live AI detection...
             return Math.random() * (max - min) + min;
         }
 
-        // --- Visão Futurista (Bounding Boxes) ---
+        // --- Visão Futurista (Bounding Boxes com Ruído Realista) ---
 
         function drawBoundingBoxes(detections) {
             const canvas = document.getElementById('object-canvas');
@@ -482,13 +505,19 @@ Press "Start Vision" to begin live AI detection...
             const ratioW = canvas.width / 640;
             const ratioH = canvas.height / 360;
 
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // Redesenha o fundo ANTES de desenhar as caixas para simular o "novo frame"
+            drawSimulatedBackground(); 
             
             detections.forEach(det => {
-                const x = det.x * ratioW;
-                const y = det.y * ratioH;
-                const w = det.w * ratioW;
-                const h = det.h * ratioH;
+                // FLUTUAÇÃO DE REALISMO: Adiciona um pequeno ruído às coordenadas e tamanho
+                const noise = Math.random() * 5 - 2.5;
+                const x = (det.x + noise) * ratioW;
+                const y = (det.y + noise) * ratioH;
+                const w = (det.w + (noise * 1.5)) * ratioW;
+                const h = (det.h + (noise * 1.5)) * ratioH;
+                
+                // Ignora a detecção ocasionalmente para simular falha de frame
+                if (Math.random() < 0.1) return; 
                 
                 let color = det.risk === 'CRITICO' ? '#FF0000' : 
                             det.risk === 'ALTO' ? '#FF8C00' : 
