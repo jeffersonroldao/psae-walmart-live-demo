@@ -1,709 +1,509 @@
+```html
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PSAE FUTURE VISION - 33.3% Cloud Efficiency | Walmart</title>
-    <meta name="description" content="PSAE Future Vision System: 33.3% Cloud Efficiency | 45ms AI Latency | $2.8M ROI - Total Detection" />
-    <link rel="icon" href="favicon.ico" />
-    <link rel="manifest" href="manifest.json" />
+    <title>Jefferson Roldão | Backend & Data Engineer</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <style>
+        :root {
+            --bg: #020617;
+            --card: #0f172a;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8;
+            --accent-glow: rgba(56, 189, 248, 0.15);
+            --border: #1e293b;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
-            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-            color: white;
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
             line-height: 1.6;
-            min-height: 100vh;
-            padding: 20px;
-        }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 400px;
-            gap: 20px;
+            overflow-x: hidden;
         }
 
-        .camera-section {
-            background: rgba(255,255,255,0.1);
-            border-radius: 20px;
-            padding: 25px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-
-        .video-container {
-            position: relative;
+        /* Nav */
+        nav {
+            position: fixed;
             width: 100%;
-            padding-top: 56.25%; /* 16:9 Aspect Ratio */
-            margin-bottom: 15px;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 0 20px rgba(0,255,255,0.5); /* Efeito futurista */
-        }
-
-        #camera-feed, #object-canvas {
-            position: absolute;
             top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        #object-canvas {
-            z-index: 10;
-            pointer-events: none;
-        }
-        #camera-feed {
-            border: 2px solid #00b4db;
-        }
-
-        .camera-controls {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .camera-btn {
-            padding: 12px;
-            border: none;
-            border-radius: 10px;
-            background: #00b4db;
-            color: white;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .camera-btn:hover {
-            background: #0083b0;
-            transform: translateY(-2px);
-        }
-        .camera-btn-danger {
-             background: #dc3545 !important;
-        }
-        .camera-btn-danger:hover {
-             background: #a71d2a !important;
-        }
-        .robot-control { display: none; }
-
-        .metrics-sidebar {
+            background: rgba(2, 6, 23, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 20px 5%;
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .nav-logo { font-weight: 800; font-size: 18px; color: var(--text-main); letter-spacing: 1px; }
+        .nav-logo span { color: var(--accent); }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            margin-left: 30px;
+            font-size: 15px;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover { color: var(--accent); }
+
+        /* Container & Sections */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section { padding: 120px 0 20px 0; position: relative; }
+
+        .section-title {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 50px;
+            display: flex;
+            align-items: center;
             gap: 15px;
         }
+        .section-title i { color: var(--accent); }
 
-        .metric-card {
-            background: rgba(255,255,255,0.1);
-            border-radius: 15px;
-            padding: 20px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            padding-top: 80px;
         }
 
-        .metric-value {
-            font-size: 2.2em;
-            font-weight: 800;
-            background: linear-gradient(135deg, #00b4db, #0083b0);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin: 8px 0;
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -20%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 60%);
+            border-radius: 50%;
+            z-index: -1;
         }
 
-        .roi-calculator {
-            background: rgba(40, 167, 69, 0.2);
-            border-radius: 15px;
-            padding: 20px;
-            margin-top: 10px;
-        }
-
-        .roi-input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid rgba(255,255,255,0.3);
-            border-radius: 5px;
-            background: rgba(0,0,0,0.3);
-            color: white;
-            margin: 8px 0;
-        }
-
-        .detections-panel {
-            background: rgba(255,255,255,0.1);
-            border-radius: 15px;
-            padding: 20px;
-            margin-top: 20px;
-            grid-column: 1 / -1;
-        }
-
-        .detection-item {
-            display: inline-block;
-            background: rgba(0, 180, 219, 0.3);
-            padding: 5px 10px;
-            border-radius: 20px;
-            margin: 5px;
-            font-size: 0.9em;
-            color: white;
-        }
+        .hero h2 { font-size: 24px; color: var(--accent); font-weight: 700; margin-bottom: 15px; letter-spacing: 1px; text-transform: uppercase;}
+        .hero h1 { font-size: 64px; font-weight: 800; letter-spacing: -2px; line-height: 1.1; margin-bottom: 30px; }
         
-        .risk-high { background: #dc3545 !important; }
-        .risk-medium { background: #ffc107 !important; color: #333 !important; }
-        
-        @keyframes flash {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+        .hook-box {
+            background: rgba(15, 23, 42, 0.6);
+            border-left: 4px solid var(--accent);
+            padding: 20px 25px;
+            font-size: 20px;
+            color: var(--text-main);
+            border-radius: 0 8px 8px 0;
+            max-width: 800px;
+            border-top: 1px solid var(--border);
+            border-right: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 30px;
         }
-        #env-selector { margin-bottom: 20px; }
-        #env-select { padding: 10px; border-radius: 5px; border: 1px solid #ccc; font-size: 1em; cursor: pointer; color: #333; }
+
+        .hero p { font-size: 18px; color: var(--text-muted); max-width: 700px; margin-bottom: 40px; }
+
+        /* Grid Layouts */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
+
+        /* Flagship Project (Leviathan) */
+        .flagship-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 50px;
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 50px;
+            align-items: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.3s;
+        }
+
+        .flagship-card:hover { border-color: var(--accent); }
+
+        .flagship-card::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--accent);
+        }
+
+        .flagship-content h3 { font-size: 32px; margin-bottom: 15px; }
+        .flagship-content p { color: var(--text-muted); margin-bottom: 25px; font-size: 16px; }
+
+        .metric-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
+        .metric { background: var(--bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border); }
+        .metric-val { font-size: 28px; font-weight: 800; color: var(--text-main); display: block; }
+        .metric-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+        /* Terminal Mockup */
+        .terminal { background: #000; border: 1px solid #333; border-radius: 8px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.8); height: 100%; display: flex; flex-direction: column;}
+        .terminal-header { background: #1a1b26; padding: 10px; display: flex; gap: 8px; border-bottom: 1px solid #333; }
+        .terminal-dot { width: 12px; height: 12px; border-radius: 50%; }
+        .terminal-body { padding: 20px; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #a9b1d6; line-height: 1.6; flex-grow: 1;}
+        .t-prompt { color: #7aa2f7; font-weight: bold; }
+        .t-cmd { color: #c0caf5; }
+        .t-warn { color: #e0af68; }
+        .t-err { color: #f7768e; font-weight: bold; }
+        .t-succ { color: #9ece6a; }
+
+        /* Architecture Cards */
+        .arch-card {
+            background: var(--bg);
+            border: 1px dashed var(--border);
+            padding: 30px;
+            border-radius: 12px;
+            height: 100%;
+        }
+        .arch-card h3 { font-size: 20px; margin-bottom: 10px; color: var(--text-main); display: flex; align-items: center; gap: 10px;}
+        .arch-card i { color: var(--accent); }
+        .arch-card p { font-size: 15px; color: var(--text-muted); }
+
+        /* Other Projects Cards */
+        .project-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            padding: 30px;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .project-card i { font-size: 32px; color: var(--accent); margin-bottom: 20px; }
+        .project-card h3 { font-size: 22px; margin-bottom: 10px; }
+        .project-card p { font-size: 15px; color: var(--text-muted); flex-grow: 1; margin-bottom: 20px; }
+
+        /* Tags */
+        .tags-container { display: flex; flex-wrap: wrap; gap: 8px; }
+        .tag {
+            padding: 6px 14px;
+            background: rgba(56, 189, 248, 0.05);
+            color: var(--accent);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Stack Section */
+        .stack-grid { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 40px;}
+        .stack-item {
+            background: var(--card);
+            border: 1px solid var(--border);
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Code Block */
+        pre { background: #000; padding: 25px; border-radius: 12px; border: 1px solid var(--border); color: #e2e8f0; font-family: 'JetBrains Mono', Courier, monospace; font-size: 14px; line-height: 1.6; overflow-x: auto; margin-top: 30px;}
+        .sql-keyword { color: var(--accent); font-weight: bold; }
+        .sql-string { color: var(--success); }
+        .sql-comment { color: #64748b; font-style: italic; }
+
+        /* Footer / Contact */
+        footer {
+            background: var(--card);
+            border-top: 1px solid var(--border);
+            padding: 80px 20px;
+            text-align: center;
+            margin-top: 100px;
+        }
+        footer h2 { font-size: 40px; margin-bottom: 20px; }
+        .contact-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 24px;
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 700;
+            margin-top: 30px;
+            padding: 15px 30px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            transition: border-color 0.3s;
+        }
+        .contact-link:hover { border-color: var(--accent); }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .hero h1 { font-size: 48px; }
+            .flagship-card { grid-template-columns: 1fr; padding: 30px; }
+            .nav-links { display: none; }
+        }
     </style>
 </head>
 <body>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-logo">JEFFERSON<span>.DEV</span></div>
+        <div class="nav-links">
+            <a href="#flagship">Motor Principal</a>
+            <a href="#arquitetura">Arquitetura</a>
+            <a href="#ecosystem">Outros Projetos</a>
+            <a href="#stack">Hard Skills</a>
+        </div>
+    </nav>
+
     <div class="container">
-        <div class="camera-section">
-            <h2>🔮 PSAE FUTURE VISION - TOTAL DETECTION</h2>
+        
+        <!-- HERO SECTION -->
+        <section class="hero">
+            <h2>Data Engineer & Backend Architect</h2>
+            <h1>Arquitetando sistemas que escalam<br>com hardware limitado.</h1>
             
-            <div id="env-selector">
-                <strong>Simular Ambiente:</strong>
-                <select id="env-select" onchange="changeEnvironment(this.value)">
-                    <option value="warehouse">Warehouse (Walmart)</option>
-                    <option value="street">Street</option>
-                    <option value="office">Office</option>
-                </select>
+            <div class="hook-box">
+                Otimização profunda de banco de dados e engenharia backend raiz. Focado em processar Big Data localmente sem a dependência ou os custos inflados de infraestruturas em nuvem.
             </div>
+
+            <p>Especialista no desenvolvimento de pipelines headless, bancos relacionais massivos e sistemas orientados a eventos para mitigar riscos corporativos e automatizar fluxos complexos.</p>
+        </section>
+
+        <!-- FLAGSHIP PROJECT (LEVIATHAN) -->
+        <section id="flagship">
+            <div class="section-title"><i class="fa-solid fa-server"></i> Sistema Core: Leviathan Data Engine</div>
             
-            <div class="video-container">
-                <video id="camera-feed" autoplay playsinline style="display:none;"></video>
-                <canvas id="object-canvas"></canvas>
-            </div>
+            <div class="flagship-card">
+                <div class="flagship-content">
+                    <h3 style="color: var(--text-main);">Auditoria Forense Massiva</h3>
+                    <p>Motor analítico 100% On-Premise focado em mineração de dados governamentais. O sistema detecta autonomamente inconsistências financeiras graves, formação de cartéis e burla de sanções aplicando 16 regras estatísticas complexas.</p>
+                    
+                    <div class="metric-grid">
+                        <div class="metric">
+                            <span class="metric-val" style="color: var(--accent);">+213M</span>
+                            <span class="metric-label">Registros Processados</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-val" style="color: var(--warning);">&lt;1.8GB</span>
+                            <span class="metric-label">Consumo Max RAM (i3)</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-val" style="color: var(--success);">18 Min</span>
+                            <span class="metric-label">Tempo Execução (Full Scan)</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-val">120GB+</span>
+                            <span class="metric-label">Volume Ingerido</span>
+                        </div>
+                    </div>
 
-            <div class="camera-controls">
-                <button class="camera-btn" id="start-btn" onclick="toggleCamera()">📷 Start Vision</button>
-                <button class="camera-btn" onclick="runAnalysisCycle()">🧠 Run Full Analysis Cycle</button>
-                <button class="camera-btn" onclick="toggleAutoMode()">🔄 Toggle Auto Mode</button>
-                <button class="camera-btn camera-btn-danger" onclick="emergencyStop()">🚨 GLOBAL HALT</button>
-            </div>
-
-        </div>
-
-        <div class="metrics-sidebar">
-            <div class="metric-card">
-                <h3>🚀 Cloud Efficiency</h3>
-                <div class="metric-value" id="cloud-efficiency">33.33%</div>
-                <div style="font-size: 0.9em; color: #ccc;">4,658 messages saved/cycle</div>
-            </div>
-
-            <div class="metric-card">
-                <h3>⚡ AI Latency</h3>
-                <div class="metric-value" id="ai-latency">45ms</div>
-                <div style="font-size: 0.9em; color: #ccc;">Real-time response guaranteed by Edge Processor</div>
-            </div>
-
-            <div class="metric-card">
-                <h3>💰 Live ROI</h3>
-                <div class="metric-value" id="roi-value">$2.8M</div>
-                <div style="font-size: 0.9em; color: #ccc;">Estimated Annual savings at fleet scale</div>
-            </div>
-
-            <div class="roi-calculator">
-                <h3>🧮 ROI Calculator</h3>
-                <div>
-                    <label>Number of Robots:</label>
-                    <input type="number" id="robot-count" class="roi-input" value="100" min="1" max="1000" onchange="calculateROI()">
+                    <div class="tags-container">
+                        <span class="tag">PostgreSQL 18</span>
+                        <span class="tag">Python</span>
+                        <span class="tag">SQL Optimization</span>
+                        <span class="tag">LLM Air-Gapped</span>
+                    </div>
                 </div>
-                <div>
-                    <label>Current Cloud Cost/Robot:</label>
-                    <input type="number" id="cloud-cost" class="roi-input" value="1200" min="100" max="10000" onchange="calculateROI()">
-                </div>
-                <div style="margin-top: 10px;">
-                    <strong>Estimated Annual Savings: <span id="calculated-savings">$2,800,000</span></strong>
-                </div>
-            </div>
 
-            <div class="metric-card">
-                <h3>🔧 System Status</h3>
-                <div id="api-status" style="padding: 10px; border-radius: 8px; background: #ffc107; color: #333; text-align: center;">
-                    🟡 System Initializing
-                </div>
-                <div style="margin-top: 10px; font-size: 0.9em;">
-                    <div>🤖 Robots Monitored: <span id="connected-robots">4/4</span></div>
-                    <div>📡 Detections Logged: <span id="messages-today">0</span></div>
-                    <div>⏱️ Uptime: <span id="system-uptime">00:00:00</span></div>
-                    <div>🎯 Risk Alerts: <span id="risk-alerts-count">0</span></div>
+                <!-- Proof of Execution (Terminal) -->
+                <div class="terminal">
+                    <div class="terminal-header">
+                        <div class="terminal-dot" style="background: #ef4444;"></div>
+                        <div class="terminal-dot" style="background: #f59e0b;"></div>
+                        <div class="terminal-dot" style="background: #10b981;"></div>
+                        <span style="font-size: 11px; color: #565f89; margin-left: auto;">root@leviathan-engine</span>
+                    </div>
+                    <div class="terminal-body">
+                        <span class="t-prompt">jefferson@server:~$</span> <span class="t-cmd">python engine.py --audit=full</span><br>
+                        <span style="color: #565f89;">[14:32:01]</span> Conectando PostgreSQL (Localhost)... <span class="t-succ">OK</span><br>
+                        <span style="color: #565f89;">[14:32:02]</span> Lendo 'empresas' (53.6M) e 'despesas' (31M)... <span class="t-succ">OK</span><br>
+                        <span style="color: #565f89;">[14:32:04]</span> Executando Anomaly Engine (16 regras)... <br>
+                        <br>
+                        <span class="t-warn">[!] ALERTA: ANOMALIA DE LASTRO FINANCEIRO</span><br>
+                        <span class="t-err">[-] ALVO DETECTADO: CNPJ 14.756.414/0001-50</span><br>
+                        &nbsp;&nbsp;&nbsp;Capital Social: R$ 0.00<br>
+                        &nbsp;&nbsp;&nbsp;Repasses Públicos: R$ 39.027.120,00<br>
+                        <br>
+                        <span style="color: #565f89;">[14:40:00]</span> 213M registros auditados em 18min.<br>
+                        <span class="t-prompt">jefferson@server:~$</span> <span class="t-cmd">_</span>
+                    </div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <div class="detections-panel">
-            <h3>🎯 Live Object Detection & AI Analysis (150+ Categories)</h3>
-            <div id="detections-container" style="margin: 15px 0;"></div>
-            <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px;">
-                <strong>🧠 Edge Cognitive Analysis (Running on Raspberry Pi):</strong>
-                <pre id="ai-analysis-output" style="margin-top: 10px; white-space: pre-wrap; font-size: 0.9em;">
-Press "Start Vision" to begin live AI detection...
-                </pre>
+        <!-- DECISÕES TÉCNICAS (O PENSAMENTO DO ARQUITETO) -->
+        <section id="arquitetura" style="padding-top: 60px;">
+            <div class="section-title"><i class="fa-solid fa-brain"></i> Arquitetura & Decisões Técnicas</div>
+            <p style="font-size: 18px; color: var(--text-muted); max-width: 900px; margin-bottom: 40px;">
+                O Leviathan foi projetado sob a premissa de que <strong>modelagem correta supera hardware caro</strong>. A engine opera localmente, priorizando eficiência de I/O e estrutura relacional ao invés de alocação excessiva de memória.
+            </p>
+
+            <div class="grid-3">
+                <div class="arch-card">
+                    <h3><i class="fa-solid fa-database"></i> Modelagem & Índices</h3>
+                    <p>Normalização estrita e uso estratégico de índices <strong>B-Tree e GIN</strong>. Eliminação de <i>Full Table Scans</i> permite executar joins entre tabelas de 50+ milhões de linhas em segundos.</p>
+                </div>
+                <div class="arch-card">
+                    <h3><i class="fa-solid fa-gears"></i> Execução no SGBD</h3>
+                    <p>As 16 regras de negócio são executadas <strong>diretamente no PostgreSQL</strong> via queries OLAP complexas. O overhead de transferir 120GB para memória via Pandas/Python foi completamente eliminado.</p>
+                </div>
+                <div class="arch-card">
+                    <h3><i class="fa-solid fa-shield-halved"></i> Infra Air-Gapped</h3>
+                    <p>Pipeline rodando 100% on-premise. Garantia total de conformidade legal (LGPD) e sigilo forense, com uso de IA local (Ollama) para geração de dossiês textuais sem evasão para a nuvem.</p>
+                </div>
             </div>
-        </div>
+
+            <!-- Código SQL como Prova de Conceito -->
+            <pre>
+<span class="sql-comment">-- PROOF OF WORK: Query analítica real executada na engine.</span>
+<span class="sql-comment">-- Otimizada para indexação B-Tree cruzando 53M x 31M de registros localmente.</span>
+
+<span class="sql-keyword">SELECT</span> 
+    e.cnpj_basico,
+    e.razao_social,
+    <span class="sql-keyword">SUM</span>(<span class="sql-keyword">CAST</span>(<span class="sql-keyword">REPLACE</span>(<span class="sql-keyword">REPLACE</span>(f.c14, <span class="sql-string">'.'</span>, <span class="sql-string">''</span>), <span class="sql-string">','</span>, <span class="sql-string">'.'</span>) <span class="sql-keyword">AS NUMERIC</span>)) <span class="sql-keyword">as</span> total_recebido
+<span class="sql-keyword">FROM</span> empresas e
+<span class="sql-keyword">JOIN</span> ft_despesa f <span class="sql-keyword">ON LEFT</span>(f.c15, 8) = e.cnpj_basico
+<span class="sql-keyword">WHERE</span> e.capital_social = 0
+<span class="sql-keyword">GROUP BY</span> e.cnpj_basico, e.razao_social
+<span class="sql-keyword">HAVING SUM</span>(<span class="sql-keyword">CAST</span>(<span class="sql-keyword">REPLACE</span>(<span class="sql-keyword">REPLACE</span>(f.c14, <span class="sql-string">'.'</span>, <span class="sql-string">''</span>), <span class="sql-string">','</span>, <span class="sql-string">'.'</span>) <span class="sql-keyword">AS NUMERIC</span>)) > 1000000;
+            </pre>
+        </section>
+
+        <!-- ECOSSISTEMA E OUTROS PROJETOS -->
+        <section id="ecosystem">
+            <div class="section-title"><i class="fa-solid fa-layer-group"></i> Ecossistema & Outros Projetos</div>
+            <p style="font-size: 18px; color: var(--text-muted); margin-bottom: 40px; max-width: 900px;">
+                Além do processamento massivo de dados, atuo na construção de infraestruturas logísticas, sistemas de telemetria IoT e automações baseadas em eventos.
+            </p>
+            
+            <div class="grid-3">
+                <div class="project-card">
+                    <i class="fa-solid fa-heart-pulse"></i>
+                    <h3>Hospital TMS</h3>
+                    <p>Sistema de rastreabilidade hospitalar operando com telemetria contínua. Evita perda de ativos sensíveis e garante auditoria sanitária.</p>
+                    <div class="tags-container" style="margin-top: auto;">
+                        <span class="tag">InfluxDB</span>
+                        <span class="tag">MQTT</span>
+                        <span class="tag">FastAPI</span>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <i class="fa-solid fa-truck-fast"></i>
+                    <h3>PSAE Logistics</h3>
+                    <p>Plataforma de gestão para controle de ativos operacionais. Arquitetura de banco modelada para mapeamento de fluxo logístico em tempo real.</p>
+                    <div class="tags-container" style="margin-top: auto;">
+                        <span class="tag">Backend</span>
+                        <span class="tag">API REST</span>
+                        <span class="tag">SQL</span>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <i class="fa-solid fa-robot"></i>
+                    <h3>AI Video Automation</h3>
+                    <p>Pipeline assíncrono headless para criação automatizada de conteúdo. Orquestra LLM para roteirização, TTS para narração e publicação via API.</p>
+                    <div class="tags-container" style="margin-top: auto;">
+                        <span class="tag">Python</span>
+                        <span class="tag">LLM</span>
+                        <span class="tag">Automation</span>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <i class="fa-solid fa-spider"></i>
+                    <h3>Data Scraping Engine</h3>
+                    <p>Sistema de coleta massiva de dados com bypass de rate-limits governamentais, sanitização de encodings legados e armazenamento estruturado.</p>
+                    <div class="tags-container" style="margin-top: auto;">
+                        <span class="tag">Python</span>
+                        <span class="tag">Requests</span>
+                        <span class="tag">Data Quality</span>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    <h3>Event Alert System</h3>
+                    <p>Microserviço de notificações automatizadas via Telegram acionado por gatilhos de banco de dados e eventos críticos do servidor.</p>
+                    <div class="tags-container" style="margin-top: auto;">
+                        <span class="tag">Webhooks</span>
+                        <span class="tag">Bot API</span>
+                        <span class="tag">Event-Driven</span>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <i class="fa-solid fa-terminal"></i>
+                    <h3>Server Automation Scripts</h3>
+                    <p>Conjunto de scripts operacionais (Linux) para deploy autônomo, rotinas de backup de banco de dados e execução agendada de ETLs.</p>
+                    <div class="tags-container" style="margin-top: auto;">
+                        <span class="tag">Bash</span>
+                        <span class="tag">Cron</span>
+                        <span class="tag">Docker</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- STACK TÉCNICA -->
+        <section id="stack">
+            <div class="section-title"><i class="fa-solid fa-screwdriver-wrench"></i> Hard Skills & Stack Base</div>
+            <div class="stack-grid">
+                <div class="stack-item"><i class="fa-solid fa-database" style="color: var(--accent);"></i> PostgreSQL (B-Tree/GIN)</div>
+                <div class="stack-item"><i class="fa-brands fa-python" style="color: var(--accent);"></i> Python</div>
+                <div class="stack-item"><i class="fa-solid fa-bolt" style="color: var(--accent);"></i> FastAPI</div>
+                <div class="stack-item"><i class="fa-brands fa-docker" style="color: var(--accent);"></i> Docker</div>
+                <div class="stack-item"><i class="fa-solid fa-server" style="color: var(--accent);"></i> Redis</div>
+                <div class="stack-item"><i class="fa-solid fa-chart-line" style="color: var(--accent);"></i> InfluxDB</div>
+                <div class="stack-item"><i class="fa-solid fa-network-wired" style="color: var(--accent);"></i> MQTT (IoT)</div>
+                <div class="stack-item" style="border-color: var(--accent);"><i class="fa-solid fa-code" style="color: var(--accent);"></i> SQL Performance</div>
+                <div class="stack-item" style="border-color: var(--accent);"><i class="fa-solid fa-filter" style="color: var(--accent);"></i> ETL Pipelines</div>
+            </div>
+        </section>
+
     </div>
 
-    <script>
-        // 🌟 PSAE FUTURE VISION SYSTEM - TUDO EM UM ARQUIVO!
-
-        // --- Variáveis Globais ---
-        let autoMode = true;
-        let analysisCount = 0;
-        let startTime = new Date();
-        let cameraStream = null;
-        let analysisInterval = null;
-        let currentEnvironment = 'warehouse';
-        let riskAlertsCount = 0;
-        let backgroundIndex = 0; 
-
-        // Simulação de Imagens de Armazém (URLs de Placeholder Genéricas) para dar o efeito de frame rodando
-        const simulatedBackgrounds = [
-            'https://via.placeholder.com/640x360/1a1a1a/FFFFFF?text=WAREHOUSE+VIEW+1',
-            'https://via.placeholder.com/640x360/333333/FFFFFF?text=WAREHOUSE+VIEW+2',
-            'https://via.placeholder.com/640x360/4d4d4d/FFFFFF?text=WAREHOUSE+VIEW+3'
-        ];
-
-        // --- Catálogo de Detecções (150+ Simulado) ---
-        const detectionUniverse = {
-            '🔫 ARMA': { 'color': '#FF0000', 'risk': 'CRITICO', 'category': 'seguranca' },
-            '💣 EXPLOSIVO': { 'color': '#FF3300', 'risk': 'CRITICO', 'category': 'seguranca' },
-            '🔪 FACA': { 'color': '#FF6600', 'risk': 'ALTO', 'category': 'seguranca' },
-            '🛡️ COLETE': { 'color': '#00BFFF', 'risk': 'BAIXO', 'category': 'seguranca' },
-            '📱 SMARTPHONE': { 'color': '#8A2BE2', 'risk': 'BAIXO', 'category': 'eletronicos' },
-            '💻 NOTEBOOK': { 'color': '#4B0082', 'risk': 'BAIXO', 'category': 'eletronicos' },
-            '⌚ SMARTWATCH': { 'color': '#9370DB', 'risk': 'BAIXO', 'category': 'eletronicos' },
-            '🎧 FONE': { 'color': '#DDA0DD', 'risk': 'BAIXO', 'category': 'eletronicos' },
-            '🗝️ CHAVE': { 'color': '#FFD700', 'risk': 'BAIXO', 'category': 'pessoal' },
-            '👛 CARTEIRA': { 'color': '#DAA520', 'risk': 'MEDIO', 'category': 'pessoal' },
-            '💳 CARTAO': { 'color': '#B8860B', 'risk': 'MEDIO', 'category': 'pessoal' },
-            '👓 OCULOS': { 'color': '#F0E68C', 'risk': 'BAIXO', 'category': 'pessoal' },
-            '🚗 CARRO': { 'color': '#00CED1', 'risk': 'MEDIO', 'category': 'veiculos' },
-            '🏍️ MOTO': { 'color': '#40E0D0', 'risk': 'ALTO', 'category': 'veiculos' },
-            '🚚 CAMINHAO': { 'color': '#00FF7F', 'risk': 'MEDIO', 'category': 'veiculos' },
-            '🚲 BICICLETA': { 'color': '#7FFF00', 'risk': 'BAIXO', 'category': 'veiculos' },
-            '🚐 VAN': { 'color': '#ADFF2F', 'risk': 'MEDIO', 'category': 'veiculos' },
-            '🚑 AMBULANCIA': { 'color': '#32CD32', 'risk': 'ALTO', 'category': 'veiculos' },
-            '🌳 ARVORE': { 'color': '#228B22', 'risk': 'BAIXO', 'category': 'natureza' },
-            '🌿 PLANTA': { 'color': '#6B8E23', 'risk': 'BAIXO', 'category': 'natureza' },
-            '🐕 CACHORRO': { 'color': '#8FBC8F', 'risk': 'BAIXO', 'category': 'natureza' },
-            '🐈 GATO': { 'color': '#98FB98', 'risk': 'BAIXO', 'category': 'natureza' },
-            '🏢 PREDIO': { 'color': '#A9A9A9', 'risk': 'BAIXO', 'category': 'estruturas' },
-            '🚪 PORTA': { 'color': '#696969', 'risk': 'BAIXO', 'category': 'estruturas' },
-            '🪑 CADEIRA': { 'color': '#808080', 'risk': 'BAIXO', 'category': 'estruturas' },
-            '🛋️ SOFA': { 'color': '#708090', 'risk': 'BAIXO', 'category': 'estruturas' },
-            '🍴 TALHER': { 'color': '#E6E6FA', 'risk': 'BAIXO', 'category': 'domestico' },
-            '🍶 GARRAFA': { 'color': '#B0C4DE', 'risk': 'BAIXO', 'category': 'domestico' },
-            '📓 LIVRO': { 'color': '#ADD8E6', 'risk': 'BAIXO', 'category': 'domestico' },
-            '🚬 CIGARRO': { 'color': '#FF4500', 'risk': 'MEDIO', 'category': 'risco' },
-            '🍷 BEBIDA': { 'color': '#FFA07A', 'risk': 'MEDIO', 'category': 'risco' },
-            '💊 REMEDIO': { 'color': '#FF6347', 'risk': 'MEDIO', 'category': 'risco' },
-            '🧪 QUIMICO': { 'color': '#FF00FF', 'risk': 'ALTO', 'category': 'risco' },
-            '🛒 CARRINHO': { 'color': '#FFD700', 'risk': 'BAIXO', 'category': 'comercial' },
-            '📦 CAIXA': { 'color': '#F4A460', 'risk': 'BAIXO', 'category': 'comercial' },
-            '🏷️ ETIQUETA': { 'color': '#D2B48C', 'risk': 'BAIXO', 'category': 'comercial' },
-            '💰 DINHEIRO': { 'color': '#B8860B', 'risk': 'MEDIO', 'category': 'comercial' },
-            '🎮 CONTROLE': { 'color': '#00FFFF', 'risk': 'BAIXO', 'category': 'entretenimento' },
-            '📺 TV': { 'color': '#00FA9A', 'risk': 'BAIXO', 'category': 'entretenimento' },
-            '🔧 CHAVE DE FENDA': { 'color': '#696969', 'risk': 'MEDIO', 'category': 'ferramentas' },
-            '⚡ ELETRICO': { 'color': '#FFD700', 'risk': 'ALTO', 'category': 'ferramentas' },
-            '🚨 POLICIA': { 'color': '#0000FF', 'risk': 'ALTO', 'category': 'emergencia' },
-            '🔥 FOGO': { 'color': '#FF4500', 'risk': 'CRITICO', 'category': 'emergencia' },
-            '💧 AGUA': { 'color': '#87CEEB', 'risk': 'BAIXO', 'category': 'emergencia' },
-            '🛰️ DRONE': { 'color': '#00BFFF', 'risk': 'MEDIO', 'category': 'tecnologia' },
-            '🤖 ROBO': { 'color': '#4682B4', 'risk': 'BAIXO', 'category': 'tecnologia' },
-            '🎒 MOCHILA': { 'color': '#D2B48C', 'risk': 'MEDIO', 'category': 'pessoal' },
-            '👞 SAPATO': { 'color': '#8B4513', 'risk': 'BAIXO', 'category': 'pessoal' },
-            // Objetos específicos de Armazém/Logística
-            '🏭 FORKLIFT': { 'color': '#FF8C00', 'risk': 'MEDIO', 'category': 'logistica' },
-            '📦 PALLET': { 'color': '#A0522D', 'risk': 'BAIXO', 'category': 'logistica' },
-            ' shelves': { 'color': '#B0C4DE', 'risk': 'BAIXO', 'category': 'logistica' },
-            ' barcode': { 'color': '#000000', 'risk': 'BAIXO', 'category': 'logistica' },
-            ' human': { 'color': '#FFC0CB', 'risk': 'ALTO', 'category': 'logistica' },
-            'PEDESTRE': { 'color': '#FFC0CB', 'risk': 'ALTO', 'category': 'logistica' },
-            'EQUIPAMENTO': { 'color': '#0083B0', 'risk': 'MEDIO', 'category': 'logistica' },
-        };
-
-        // Regras de qual objeto pode aparecer em qual ambiente
-        const environmentObjects = {
-            warehouse: ['FORKLIFT', 'PALLET', 'shelves', 'CAIXA', 'ROBO', 'EQUIPAMENTO', 'human'],
-            street: ['CARRO', 'BICICLETA', 'PEDESTRE', 'ARVORE', 'POLICIA', 'MOTO', 'AMBULANCIA'],
-            office: ['NOTEBOOK', 'CADEIRA', 'SMARTPHONE', 'NOTEBOOK', 'LIVRO', 'EQUIPAMENTO'],
-        };
-        
-        // Regras de Risco
-        const riskPatterns = {
-            warehouse: { 'FORKLIFT': 'MEDIO', 'human': 'ALTO', '🔥 FOGO': 'CRITICO', '🔪 FACA': 'ALTO' },
-            street: { '🏍️ MOTO': 'ALTO', 'CARRO': 'MEDIO', '🚨 POLICIA': 'ALTO', 'PEDESTRE': 'ALTO' },
-            office: { '🔥 FOGO': 'ALTO', 'EXPLOSIVO': 'CRITICO', 'NOTEBOOK': 'MEDIO' }
-        };
-
-        // --- Funções do Sistema ---
-
-        function changeEnvironment(newEnv) {
-            currentEnvironment = newEnv;
-            // Força a atualização do canvas para o novo ambiente
-            stopVision();
-            startSimulatedVision();
-            runAnalysisCycle();
-        }
-        
-        // Função que aciona Start/Stop
-        function toggleCamera() {
-            if (analysisInterval) {
-                stopVision();
-            } else {
-                startSimulatedVision();
-            }
-        }
-        
-        // Função que simula o START do sistema
-        async function startSimulatedVision() {
-            if (analysisInterval) {
-                stopVision();
-                return;
-            }
-
-            // Garante que o canvas tem o tamanho correto
-            const canvas = document.getElementById('object-canvas');
-            canvas.width = 640;
-            canvas.height = 360; 
+    <!-- FOOTER / CONTACT -->
+    <footer id="contact">
+        <div class="container">
+            <h2 style="color: var(--text-main);">Pronto para resolver problemas de infraestrutura?</h2>
+            <p style="font-size: 20px; color: var(--text-muted); max-width: 700px; margin: 0 auto;">Busco oportunidades onde o foco esteja na arquitetura eficiente de sistemas e não apenas em alugar mais servidores na nuvem.</p>
             
-            // Força o desenho do fundo simulado (o preto/azul com texto)
-            drawSimulatedBackground(); 
-
-            document.getElementById('start-btn').textContent = '⏹️ Stop Vision';
-            updateStatus('🟢 Future Vision Online (Simulated Mode Active)', 'success');
+            <a href="https://www.linkedin.com/in/jeffersonroldao" target="_blank" class="contact-link">
+                <i class="fa-brands fa-linkedin" style="color: var(--accent);"></i> Conectar no LinkedIn
+            </a>
             
-            // Inicia o Auto Mode (1s interval)
-            if (autoMode) {
-                analysisInterval = setInterval(runAnalysisCycle, 1000);
-            } else {
-                runAnalysisCycle(); 
-            }
-        }
+            <p style="margin-top: 40px; font-size: 14px; color: var(--text-muted);">
+                <i class="fa-solid fa-location-dot"></i> Gravataí, RS - Brasil<br><br>
+                © 2026 Jefferson Roldão — Engenharia de Dados & Backend
+            </p>
+        </div>
+    </footer>
 
-        // Função que simula o STOP do sistema
-        function stopVision() {
-            if (analysisInterval) {
-                clearInterval(analysisInterval);
-                analysisInterval = null;
-            }
-            document.getElementById('start-btn').textContent = '📷 Start Vision';
-            drawSimulatedBackground(); 
-            updateStatus('🔴 Vision System Offline', 'error');
-        }
-        
-        function toggleAutoMode() {
-            autoMode = !autoMode;
-            if (autoMode) {
-                analysisInterval = setInterval(runAnalysisCycle, 1000);
-                updateStatus('🔄 Auto Mode Active (1s interval)', 'info');
-            } else {
-                clearInterval(analysisInterval);
-                updateStatus('⏸️ Auto Mode Paused', 'warning');
-            }
-        }
-        
-        function emergencyStop() {
-            stopVision();
-            updateStatus('🚨 GLOBAL HALT ACTIVATED (CRITICO)', 'error');
-            alert('🚨 EMERGENCY STOP ACTIVATED. All systems halted.');
-        }
-
-        // Desenha o fundo (agora rotativo e realista)
-        function drawSimulatedBackground() {
-            const canvas = document.getElementById('object-canvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = 640;
-            canvas.height = 360; 
-            
-            // 1. Muda o índice e carrega a imagem
-            const bgUrl = simulatedBackgrounds[backgroundIndex];
-            backgroundIndex = (backgroundIndex + 1) % simulatedBackgrounds.length;
-            
-            const img = new Image();
-            img.crossOrigin = "Anonymous";
-            img.onload = function() {
-                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                // Não chama drawBoundingBoxes([]) aqui para evitar apagar as caixas antes do ciclo.
-            }
-            img.onerror = function() {
-                 // Fallback simples se a URL falhar
-                ctx.fillStyle = '#2c5364';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                ctx.fillStyle = 'white';
-                ctx.font = '20px Arial';
-                ctx.fillText('Simulated Background Failed to Load', 150, 180);
-            }
-            img.src = bgUrl;
-        }
-        
-        // --- Loop Principal de Análise ---
-        
-        async function runAnalysisCycle() {
-            const detections = simulateFutureDetection();
-            
-            // O desenho das caixas agora garante que o fundo é desenhado antes
-            drawBoundingBoxes(detections); 
-            renderDetectionBadges(detections);
-            
-            const analysisOutput = performEdgeCognitiveAnalysis(detections);
-            document.getElementById('ai-analysis-output').textContent = analysisOutput;
-            
-            analysisCount++;
-            updateMetrics(detections);
-        }
-
-        // --- Simulação de Detecção Futurista (Filtro por Ambiente) ---
-
-        function simulateFutureDetection() {
-            const detections = [];
-            
-            let availableObjects = environmentObjects[currentEnvironment].slice(); 
-
-            // Adiciona o risco (FOGO ou FACA) com chance baixa
-            if (Math.random() < 0.05) {
-                const highRiskItem = Math.random() < 0.5 ? '🔥 FOGO' : '🔪 FACA';
-                if (!availableObjects.includes(highRiskItem)) availableObjects.push(highRiskItem);
-            }
-            
-            const numDetections = 3 + Math.floor(Math.random() * 3);
-            
-            for (let i = 0; i < numDetections; i++) {
-                const objType = availableObjects[Math.floor(Math.random() * availableObjects.length)];
-                
-                const width = Math.floor(Math.random() * 100) + 50;
-                const height = Math.floor(Math.random() * 100) + 50;
-                
-                detections.push({
-                    type: objType,
-                    confidence: randomFloat(0.7, 0.99),
-                    x: Math.random() * (640 - width),
-                    y: Math.random() * (360 - height),
-                    w: width,
-                    h: height,
-                    ...detectionUniverse[objType]
-                });
-            }
-            
-            return detections;
-        }
-        
-        function randomFloat(min, max) {
-            return Math.random() * (max - min) + min;
-        }
-
-        // --- Visão Futurista (Bounding Boxes com Ruído Realista) ---
-
-        function drawBoundingBoxes(detections) {
-            const canvas = document.getElementById('object-canvas');
-            const ctx = canvas.getContext('2d');
-            const ratioW = canvas.width / 640;
-            const ratioH = canvas.height / 360;
-
-            // Redesenha o fundo ANTES de desenhar as caixas para simular o "novo frame"
-            drawSimulatedBackground(); 
-            
-            detections.forEach(det => {
-                // FLUTUAÇÃO DE REALISMO: Adiciona um pequeno ruído às coordenadas e tamanho
-                const noise = Math.random() * 5 - 2.5;
-                const x = (det.x + noise) * ratioW;
-                const y = (det.y + noise) * ratioH;
-                const w = (det.w + (noise * 1.5)) * ratioW;
-                const h = (det.h + (noise * 1.5)) * ratioH;
-                
-                // Ignora a detecção ocasionalmente para simular falha de frame
-                if (Math.random() < 0.1) return; 
-                
-                let color = det.risk === 'CRITICO' ? '#FF0000' : 
-                            det.risk === 'ALTO' ? '#FF8C00' : 
-                            det.risk === 'MEDIO' ? '#FFFF00' : '#00FFFF';
-                
-                ctx.strokeStyle = color;
-                ctx.lineWidth = 2;
-                ctx.strokeRect(x, y, w, h);
-                
-                ctx.fillStyle = color;
-                ctx.fillRect(x, y - 20, w * 0.7, 20);
-                
-                ctx.fillStyle = '#000000';
-                ctx.font = '12px Arial';
-                ctx.fillText(`${det.type} (${Math.round(det.confidence * 100)}%)`, x + 5, y - 5);
-            });
-        }
-        
-        function renderDetectionBadges(detections) {
-            const container = document.getElementById('detections-container');
-            container.innerHTML = '';
-            
-            detections.forEach(det => {
-                const badge = document.createElement('div');
-                badge.className = 'detection-item';
-                
-                if (det.risk === 'CRITICO' || det.risk === 'ALTO') {
-                    badge.classList.add('risk-high');
-                    riskAlertsCount++;
-                } else if (det.risk === 'MEDIO') {
-                    badge.classList.add('risk-medium');
-                }
-                
-                badge.textContent = `${det.type} (${Math.round(det.confidence * 100)}%) | ${det.risk} | ${det.distance ? det.distance : ''}`;
-                container.appendChild(badge);
-            });
-            document.getElementById('risk-alerts-count').textContent = riskAlertsCount;
-        }
-
-        // --- Lógica Cognitiva do Edge Processor (Pi) - COM DISTÂNCIA ---
-        
-        function calculateSimulatedDistance(detection) {
-            const sizeFactor = (detection.w + detection.h) / 2;
-            let distance = Math.max(0, 100 - sizeFactor); 
-
-            if (distance < 20 && sizeFactor > 80) return 'IMINENTE (1-2m)';
-            if (distance < 40) return 'PRÓXIMO (3-5m)';
-            return 'DISTANTE (> 5m)';
-        }
-
-
-        function performEdgeCognitiveAnalysis(detections) {
-            const environment = currentEnvironment;
-            const analysis = { situationSummary: '', riskAssessment: 'BAIXO', cognitiveInsights: [], recommendedActions: [] };
-            const detectedTypes = detections.map(d => d.type);
-            
-            let riskLevel = 'BAIXO';
-            let highRiskItems = [];
-
-            // 1. Avaliação de Risco com Lógica de Distância
-            detections.forEach(det => {
-                const distance = calculateSimulatedDistance(det);
-                det.distance = distance; 
-                
-                // CRÍTICO: Risco máximo E (IMINENTE ou PRÓXIMO)
-                if (det.risk === 'CRITICO' && (distance === 'IMINENTE (1-2m)' || distance === 'PRÓXIMO (3-5m)')) {
-                    highRiskItems.push(det);
-                    riskLevel = 'CRITICO';
-                } else if (det.risk === 'ALTO' && distance === 'IMINENTE (1-2m)') {
-                    highRiskItems.push(det);
-                    if (riskLevel !== 'CRITICO') riskLevel = 'ALTO';
-                } else if (det.risk === 'MEDIO' && distance === 'IMINENTE (1-2m)') {
-                    if (riskLevel === 'BAIXO') riskLevel = 'MEDIO';
-                }
-            });
-
-            // --- Determinação da Ação ---
-            if (riskLevel === 'CRITICO') {
-                analysis.cognitiveInsights.push(`🚨 RISCO CRÍTICO IMINENTE: ${highRiskItems.map(d => d.type).join(', ')}.`);
-                analysis.recommendedActions.push('GLOBAL HALT: Parada Imediata. (Zero Parada Desnecessária)');
-            } else if (riskLevel === 'ALTO') {
-                analysis.cognitiveInsights.push('⚠️ Risco ALTO: Desacelerar e Re-rotear em 500ms.');
-                analysis.recommendedActions.push('Reduzir velocidade e acionar Gemini (Nuvem) para validação.');
-            } else if (riskLevel === 'MEDIO') {
-                analysis.cognitiveInsights.push('🟡 Risco MÉDIO: Item próximo detectado. Atenção redobrada.');
-                analysis.recommendedActions.push('Manter velocidade e ajustar rota no Edge.');
-            } else {
-                 analysis.cognitiveInsights.push(`✅ Ambiente ${environment.toUpperCase()} seguro. ${detections.length} objetos detectados.`);
-                 analysis.recommendedActions.push('Proceder com velocidade operacional máxima.');
-            }
-            
-            // 2. Otimização (Simulação de ML)
-            const efficiency = parseFloat(document.getElementById('cloud-efficiency').textContent) / 100 || 0.3333;
-            analysis.cognitiveInsights.push(`🎯 Otimização de Rota ML: Clear path detected.`);
-
-            analysis.riskAssessment = riskLevel;
-
-            // 3. Resposta Formatada (Output de Negócio)
-            return `🔮 EDGE COGNITIVE ANALYSIS (Pi Processor)
-
-DETECTED OBJECTS (Localização):
-${detections.map(det => `• ${det.type} (${Math.round(det.confidence * 100)}%) - ${det.distance}`).join('\n')}
-
-RISK ASSESSMENT: ${analysis.riskAssessment}
-EDGE INSIGHTS (45ms):
-${analysis.cognitiveInsights.join('\n')}
-
-RECOMMENDED ACTION:
-${analysis.recommendedActions.join('\n')}
-
-SAFETY SCORE: ${riskLevel === 'CRITICO' ? '10/100' : riskLevel === 'ALTO' ? '40/100' : '98/100'}
-CLOUD USAGE: ${efficiency.toFixed(2)}% reduction achieved`;
-        }
-
-        // --- Funções de Métricas e Inicialização ---
-
-        function updateMetrics(detections) {
-            const baseEfficiency = 33.33;
-            const activityBonus = analysisCount * 0.005;
-            const liveEfficiency = Math.min(33.8, baseEfficiency + activityBonus);
-            
-            document.getElementById('cloud-efficiency').textContent = liveEfficiency.toFixed(2) + '%';
-            
-            const liveLatency = 45 + Math.floor(Math.random() * 4 - 2);
-            document.getElementById('ai-latency').textContent = liveLatency + 'ms';
-            
-            const currentDetections = parseInt(document.getElementById('messages-today').textContent) || 0;
-            document.getElementById('messages-today').textContent = (currentDetections + detections.length).toLocaleString();
-            
-            calculateROI();
-        }
-
-        function calculateROI() {
-            const robotCount = parseInt(document.getElementById('robot-count').value) || 100;
-            const cloudCost = parseInt(document.getElementById('cloud-cost').value) || 1200;
-            const efficiency = parseFloat(document.getElementById('cloud-efficiency').textContent) / 100 || 0.3333;
-            
-            const annualSavings = robotCount * cloudCost * efficiency * 12;
-            
-            document.getElementById('calculated-savings').textContent = '$' + annualSavings.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0});
-            document.getElementById('roi-value').textContent = '$' + (annualSavings / 1000000).toFixed(1) + 'M';
-        }
-
-        function updateUptime() {
-            setInterval(() => {
-                const now = new Date();
-                const uptime = Math.floor((now - startTime) / 1000);
-                const hours = Math.floor(uptime / 3600);
-                const minutes = Math.floor((uptime % 3600) / 60);
-                const seconds = uptime % 60;
-                
-                document.getElementById('system-uptime').textContent = 
-                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            }, 1000);
-        }
-
-        function updateStatus(message, type = 'info') {
-            const statusEl = document.getElementById('api-status');
-            const colors = {
-                info: '#00b4db',
-                success: '#28a745', 
-                warning: '#ffc107',
-                error: '#dc3545'
-            };
-            
-            statusEl.textContent = message;
-            statusEl.style.background = colors[type] || colors.info;
-            statusEl.style.color = (type === 'warning' || type === 'success') ? '#333' : 'white';
-        }
-
-        // 🚀 INITIALIZE SYSTEM
-        updateUptime();
-        calculateROI();
-        drawSimulatedBackground(); 
-        updateStatus('🟡 System Initialized. Press "Start Vision"', 'warning');
-        
-        // 🔒 IP PROTECTION
-        document.addEventListener('contextmenu', e => e.preventDefault());
-        document.addEventListener('keydown', e => {
-            if ((e.ctrlKey || e.metaKey) && (e.key === 'p' || e.key === 's' || e.key === 'u')) {
-                e.preventDefault();
-                alert('🚫 PSAE Intellectual Property Protected');
-            }
-        });
-
-        console.log('🚀 PSAE Future Vision Demo Loaded Successfully!');
-    </script>
 </body>
 </html>
+
+
+```
